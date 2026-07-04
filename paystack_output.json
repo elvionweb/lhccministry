@@ -1,0 +1,9 @@
+{
+  "status": false,
+  "message": "Unknown error occurred, please try again",
+  "meta": {
+    "nextStep": "Ensure that the value(s) you're passing are valid."
+  },
+  "type": "validation_error",
+  "code": "invalid_params"
+}
