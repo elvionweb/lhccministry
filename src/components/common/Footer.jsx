@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import logos from "../../assets/logos.jpg"; // Updated path to your logo
 import API from "../../utils/api"; // Integrating your professional API utility
 
 export default function Footer() {
@@ -139,6 +140,24 @@ export default function Footer() {
             <FaYoutube className="hover:text-white cursor-pointer transition" />
             <FaTwitter className="hover:text-white cursor-pointer transition" />
           </div>
+
+           {/* Builder Credit */}
+        <p className="mt-6 text-xs sm:text-sm opacity-80 flex items-center justify-center gap-2">
+          <img
+              src={logos}
+              alt="Elvionweb Logo"
+              className="w-8 h-8 object-contain"
+          />
+          Built by{" "}
+          <a
+            href="https://www.elvionweb.com"
+        target="_blank"
+          rel="noopener noreferrer"
+        className="font-semibold underline underline-offset-4 hover:opacity-100 transition-opacity"
+          >
+          Elvionweb
+          </a>
+          </p>
 
           {/* Right Side - Copyright */}
           <div className="text-gray-400 text-right">
