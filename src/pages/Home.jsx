@@ -16,8 +16,8 @@ const Home = () => {
   return (
     <div>
         <HeroSection />
-        <UpcomingEvents />
         <LeadershipTeam />
+        <UpcomingEvents />
         <LiveStream />
         <LatestSermons />
         <Testimonials />

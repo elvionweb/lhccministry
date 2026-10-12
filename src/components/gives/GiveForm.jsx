@@ -43,21 +43,25 @@ const GiveForm = () => {
     }
   };
 
+  const inputClass =
+    "w-full rounded-xl border-2 border-gray-100 bg-gray-50 px-4 py-3.5 text-base text-gray-900 placeholder-gray-400 outline-none transition-all focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-600/10 sm:px-5 sm:py-4";
+
   if (success) {
     return (
-      <div className="bg-white p-8 rounded-3xl text-center animate-fade-in">
-        <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="animate-fade-in relative overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 text-center shadow-2xl sm:p-10">
+        <div className="absolute left-0 top-0 h-2 w-full bg-gradient-to-r from-emerald-500 to-teal-400" />
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 ring-8 ring-emerald-50">
+          <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">God Bless You!</h2>
-        <p className="text-gray-600 mb-8">
+        <h2 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl">God Bless You!</h2>
+        <p className="mb-8 text-gray-600">
           Your donation has been received and verified.
         </p>
         <button
           onClick={() => { setSuccess(false); setStep(1); }}
-          className="bg-blue-50 text-blue-700 font-bold px-8 py-3 rounded-full hover:bg-blue-100 transition"
+          className="w-full rounded-full bg-blue-50 px-8 py-3 font-bold text-blue-700 transition hover:bg-blue-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2 active:scale-95 sm:w-auto"
         >
           Make another donation
         </button>
@@ -69,109 +73,174 @@ const GiveForm = () => {
     <div className="relative">
       {/* Loading Overlay */}
       {isProcessing && (
-        <div className="absolute inset-0 bg-white/80 z-50 flex flex-col items-center justify-center rounded-3xl">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-700 mb-4"></div>
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center rounded-3xl bg-white/85 backdrop-blur-sm">
+          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-100 border-t-blue-700"></div>
           <p className="font-bold text-blue-800">Finalizing donation...</p>
         </div>
       )}
 
-      <div className="bg-white p-6 sm:p-10 rounded-3xl shadow-xl border border-gray-200 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 to-cyan-500"></div>
+      <div className="relative overflow-hidden rounded-3xl border border-gray-100 bg-white p-5 shadow-2xl sm:p-8 md:p-10">
+        <div className="absolute left-0 top-0 h-2 w-full bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400"></div>
 
-        <h2 className="text-2xl font-black text-blue-800 mb-8 text-center uppercase tracking-tight">
+        <h2 className="mb-5 text-center text-xl font-black uppercase tracking-tight text-blue-800 sm:text-2xl">
          Online Giving
         </h2>
 
+        {/* Step indicator (display only) */}
+        <div className="mb-7 flex items-center justify-center gap-3 text-xs font-bold uppercase tracking-wider sm:mb-8">
+          <span className="flex items-center gap-2 text-blue-700">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-700 text-[11px] text-white">
+              {step === 1 ? "1" : "✓"}
+            </span>
+            Amount
+          </span>
+          <span
+            aria-hidden="true"
+            className={`h-0.5 w-8 rounded-full sm:w-12 ${step === 2 ? "bg-blue-700" : "bg-gray-200"}`}
+          />
+          <span
+            className={`flex items-center gap-2 ${step === 2 ? "text-blue-700" : "text-gray-400"}`}
+          >
+            <span
+              className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] ${
+                step === 2 ? "bg-blue-700 text-white" : "bg-gray-200 text-gray-500"
+              }`}
+            >
+              2
+            </span>
+            Details
+          </span>
+        </div>
+
         {step === 1 ? (
-          <div className="space-y-6 animate-fade-in">
+          <div className="animate-fade-in space-y-6">
              {/* Type Selection */}
-             <div className="grid grid-cols-3 gap-2">
-              {["Tithe", "Offering", "Special"].map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setFormData({ ...formData, type: t })}
-                  className={`py-3 rounded-xl border-2 font-bold text-xs transition-all ${
-                    formData.type === t ? "border-blue-600 bg-blue-50 text-blue-700" : "border-gray-100 text-gray-400"
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
+             <div>
+               <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">
+                 I'm giving
+               </p>
+               <div className="grid grid-cols-3 gap-2 rounded-2xl bg-gray-100 p-1.5">
+                {["Tithe", "Offering", "Special"].map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setFormData({ ...formData, type: t })}
+                    aria-pressed={formData.type === t}
+                    className={`rounded-xl py-3 text-xs font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 sm:text-sm ${
+                      formData.type === t
+                        ? "bg-white text-blue-700 shadow-md ring-1 ring-blue-100"
+                        : "text-gray-500 hover:text-blue-700"
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Amount Grid */}
-            <div className="grid grid-cols-3 gap-2">
-              {presetAmounts.map((amt) => (
-                <button
-                  key={amt}
-                  onClick={() => setFormData({ ...formData, amount: amt })}
-                  className={`py-3 rounded-xl border-2 font-black transition-all ${
-                    Number(formData.amount) === amt ? "bg-blue-700 border-blue-700 text-white" : "bg-gray-50 border-transparent text-gray-600"
-                  }`}
-                >
-                  ₦{amt.toLocaleString()}
-                </button>
-              ))}
+            <div>
+              <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">
+                Choose an amount
+              </p>
+              <div className="grid grid-cols-2 gap-2.5 min-[420px]:grid-cols-3 sm:gap-3">
+                {presetAmounts.map((amt) => (
+                  <button
+                    key={amt}
+                    onClick={() => setFormData({ ...formData, amount: amt })}
+                    aria-pressed={Number(formData.amount) === amt}
+                    className={`rounded-xl border-2 px-2 py-3.5 text-sm font-black transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 active:scale-95 sm:text-base ${
+                      Number(formData.amount) === amt
+                        ? "border-blue-700 bg-blue-700 text-white shadow-lg shadow-blue-500/30"
+                        : "border-transparent bg-gray-50 text-gray-700 hover:border-blue-200 hover:bg-blue-50"
+                    }`}
+                  >
+                    ₦{amt.toLocaleString()}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-400">₦</span>
-              <label htmlFor="give-amount" className="sr-only">Enter Amount</label>
-              <input
-                id="give-amount"
-                name="amount"
-                type="number"
-                placeholder="Enter Amount"
-                className="w-full pl-10 pr-4 py-4 rounded-xl border-2 border-gray-100 focus:border-blue-600 outline-none font-bold text-lg transition-all"
-                value={formData.amount}
-                onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-              />
+            <div>
+              <label
+                htmlFor="give-amount"
+                className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500"
+              >
+                Or enter amount
+              </label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-gray-400">₦</span>
+                <input
+                  id="give-amount"
+                  name="amount"
+                  type="number"
+                  inputMode="numeric"
+                  placeholder="Enter Amount"
+                  className="w-full rounded-xl border-2 border-gray-100 bg-gray-50 py-4 pl-10 pr-4 text-lg font-bold text-gray-900 outline-none transition-all focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-600/10"
+                  value={formData.amount}
+                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                />
+              </div>
             </div>
 
-            <div className="flex items-center justify-center">
-              <button
+            <button
               disabled={!formData.amount || formData.amount <= 0}
               onClick={() => setStep(2)}
-              className="w-32 bg-blue-700 text-white font-black py-4 rounded-xl shadow-lg disabled:opacity-30 transition-transform active:scale-95"
+              className="w-full rounded-xl bg-blue-700 py-4 font-black tracking-wide text-white shadow-lg shadow-blue-500/25 transition-all hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30"
             >
               CONTINUE
             </button>
-            </div>
           </div>
         ) : (
-          <div className="space-y-5 animate-fade-in">
-            <button onClick={() => setStep(1)} className="flex items-center text-gray-600 font-bold text-sm hover:text-blue-600">
+          <div className="animate-fade-in space-y-5">
+            <button
+              onClick={() => setStep(1)}
+              className="inline-flex items-center text-sm font-bold text-gray-600 transition-colors hover:text-blue-600 focus:outline-none focus-visible:underline"
+            >
               ← BACK TO AMOUNT
             </button>
 
-            <div className="bg-gray-50 p-5 rounded-2xl flex justify-between items-center border border-dashed border-gray-200">
-              <span className="text-gray-500 font-bold">{formData.type}</span>
-              <span className="text-2xl font-black text-gray-900">₦{Number(formData.amount).toLocaleString()}</span>
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-4 sm:p-5">
+              <span className="font-bold text-gray-600">{formData.type}</span>
+              <span className="text-2xl font-black text-gray-900 sm:text-3xl">₦{Number(formData.amount).toLocaleString()}</span>
             </div>
 
             <div className="space-y-4">
-              <label htmlFor="give-name" className="sr-only">Full Name</label>
-              <input
-                id="give-name"
-                name="name"
-                autoComplete="name"
-                type="text"
-                placeholder="Full Name"
-                className="w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-blue-600 outline-none transition-all"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              />
-              <label htmlFor="give-email" className="sr-only">Email Address</label>
-              <input
-                id="give-email"
-                name="email"
-                autoComplete="email"
-                type="email"
-                placeholder="Email Address"
-                className="w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-blue-600 outline-none transition-all"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              />
+              <div>
+                <label
+                  htmlFor="give-name"
+                  className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-500"
+                >
+                  Full Name
+                </label>
+                <input
+                  id="give-name"
+                  name="name"
+                  autoComplete="name"
+                  type="text"
+                  placeholder="Full Name"
+                  className={inputClass}
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="give-email"
+                  className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-500"
+                >
+                  Email Address
+                </label>
+                <input
+                  id="give-email"
+                  name="email"
+                  autoComplete="email"
+                  type="email"
+                  placeholder="Email Address"
+                  className={inputClass}
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                />
+              </div>
             </div>
 
             {formData.name && formData.email ? (
@@ -184,14 +253,22 @@ const GiveForm = () => {
                 text={`GIVE ₦${Number(formData.amount).toLocaleString()}`}
               />
             ) : (
-              <div className="flex items-center justify-center">
-                <button disabled className="w-32 bg-gray-200 text-gray-400 py-4 rounded-xl font-bold">
+              <button
+                disabled
+                className="w-full cursor-not-allowed rounded-xl bg-gray-200 py-4 font-bold text-gray-400"
+              >
                 Complete
               </button>
-              </div>
             )}
           </div>
         )}
+
+        <p className="mt-6 flex items-center justify-center gap-1.5 text-center text-xs text-gray-400">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5">
+            <path d="M19 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zM7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          Payments are processed securely by Paystack
+        </p>
       </div>
     </div>
   );

@@ -59,33 +59,64 @@ const GalleryPage = () => {
   const hasMore = visibleCount < images.length;
 
   return (
-    <div className="min-h-screen bg-white pt-20 pb-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Header Section */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <h1 className="text-3xl md:text-5xl font-bold font-heading text-blue-700 mb-4 tracking-tight">
-            Our Gallery
-          </h1>
-          <p className="text-gray-600 text-lg font-body">
-            Experience the joy, worship, and community at Liberty House Christian Center.
-          </p>
-        </div>
-
-        {/* Filter */}
-        <CategoryFilter
-          categories={CATEGORIES}
-          activeCategory={activeCategory}
-          onSelect={handleCategorySelect}
+    <div className="min-h-screen overflow-x-hidden bg-gray-950">
+      {/* ---------- Hero header ---------- */}
+      <header className="relative isolate overflow-hidden bg-gradient-to-br from-blue-700 via-blue-900 to-gray-950 px-4 pb-14 pt-28 text-center sm:pb-20 sm:pt-32">
+        <div
+          aria-hidden="true"
+          className="absolute -right-16 -top-16 -z-10 h-64 w-64 rounded-full bg-white/10 blur-3xl"
         />
+        <div
+          aria-hidden="true"
+          className="absolute -bottom-20 -left-10 -z-10 h-64 w-64 rounded-full bg-amber-300/20 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 opacity-[0.12]"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)',
+            backgroundSize: '22px 22px',
+          }}
+        />
+
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-300 sm:text-sm">
+          Moments &amp; Memories
+        </p>
+        <h1 className="mt-2 font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
+          Our Gallery
+        </h1>
+        <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-amber-300" />
+        <p className="mx-auto mt-4 max-w-2xl font-body text-sm leading-6 text-blue-100 sm:text-base md:text-lg">
+          Experience the joy, worship, and community at Liberty House Christian Center.
+        </p>
+      </header>
+
+      <div className="mx-auto w-full max-w-7xl px-4 pb-16 sm:px-6 sm:pb-20 lg:px-8">
+        {/* Filter */}
+        <div className="relative z-10 -mt-7 sm:-mt-9">
+          <CategoryFilter
+            categories={CATEGORIES}
+            activeCategory={activeCategory}
+            onSelect={handleCategorySelect}
+          />
+        </div>
 
         {/* Content */}
         {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-700"></div>
+          <div className="flex flex-col items-center justify-center gap-4 py-24">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-white/15 border-t-amber-300" />
+            <p className="text-sm font-medium text-white/70">Loading photos…</p>
           </div>
         ) : (
           <>
+            {images.length > 0 && (
+              <p className="mb-5 px-1 text-sm font-medium text-white/60">
+                {images.length} {images.length === 1 ? 'photo' : 'photos'}
+                {activeCategory !== 'All' && ` in ${activeCategory}`}
+              </p>
+            )}
+
             <GalleryGrid 
               images={visibleImages} 
               onImageClick={handleImageClick} 
@@ -93,10 +124,13 @@ const GalleryPage = () => {
 
             {/* Load More */}
             {hasMore && (
-              <div className="flex justify-center mt-12">
+              <div className="mt-10 flex flex-col items-center gap-3 sm:mt-12">
+                <p className="text-xs font-medium text-white/60">
+                  Showing {visibleImages.length} of {images.length}
+                </p>
                 <button
                   onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
-                  className="bg-blue-50 text-blue-700 font-bold px-8 py-3 rounded-full hover:bg-blue-100 transition-colors shadow-sm"
+                  className="w-full max-w-xs rounded-full bg-white px-8 py-3 font-bold text-blue-700 shadow-lg transition-all duration-300 hover:bg-amber-300 hover:text-gray-900 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 active:scale-95 sm:w-auto"
                 >
                   Load More
                 </button>
@@ -104,7 +138,6 @@ const GalleryPage = () => {
             )}
           </>
         )}
-
       </div>
 
       {/* Lightbox */}
